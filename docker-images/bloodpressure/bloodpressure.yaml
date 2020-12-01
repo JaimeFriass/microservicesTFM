@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bloodpressure-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: generator
+  template:
+    metadata:
+      labels:
+        tier: generator
+      annotations:
+        maintainer: cywu
+    spec:
+      containers:
+        - name: bloodpressure-generator
+          image: jaimefriass/bloodpressure-generator:latest
+          env:
+            - name: REDIS_HOST
+              value: lcredis-service.default
+  minReadySeconds: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

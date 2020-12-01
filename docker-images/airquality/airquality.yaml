@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airquality
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: api
+  template:
+    metadata:
+      labels:
+        tier: api
+      annotations:
+        maintainer: cywu
+    spec:
+      containers:
+        - name: airquality
+          image: jaimefriass/airquality:latest
+          env:
+            - name: REDIS_HOST
+              value: lcredis-service.default
+  minReadySeconds: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
